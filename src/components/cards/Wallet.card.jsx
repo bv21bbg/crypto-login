@@ -2,29 +2,67 @@ import { useCallback, useMemo, useState } from "react";
 import {
   Button,
   Card,
+  Columns,
+  Content,
   Icon,
   Level,
   Panel,
   Section,
   Tabs,
+  Tag,
 } from "react-bulma-components";
+import { MetaMaskWallet, EctoWallet, PoltergeistWallet } from "../wallets";
 
 import blockchainEthereumIcon from "../../assets/blockchain-ethereum.webp";
 import blockchainPhantasmaIcon from "../../assets/blockchain-phantasma.png";
 import walletMetaMaskIcon from "../../assets/wallet-metamask.png";
 import walletEctoIcon from "../../assets/wallet-ecto.png";
 import walletPoltergeistIcon from "../../assets/wallet-poltergeist.png";
+import { Download } from "react-feather";
 
 const DATA = {
   blockchains: [
+    {
+      key: "ALL",
+      name: "All",
+      icon: blockchainEthereumIcon,
+      wallets: [
+        {
+          key: "mtmk",
+          name: "MetaMask",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: walletMetaMaskIcon,
+          component: MetaMaskWallet,
+        },
+        {
+          key: "ecto",
+          name: "Ecto",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: walletEctoIcon,
+          component: EctoWallet,
+        },
+        {
+          key: "pgst",
+          name: "Poltergeist",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          icon: walletPoltergeistIcon,
+          component: PoltergeistWallet,
+        },
+      ],
+    },
     {
       key: "ETH",
       name: "Ethereum",
       icon: blockchainEthereumIcon,
       wallets: [
         {
+          key: "mtmk",
           name: "MetaMask",
           icon: walletMetaMaskIcon,
+          component: MetaMaskWallet,
         },
       ],
     },
@@ -34,12 +72,16 @@ const DATA = {
       icon: blockchainPhantasmaIcon,
       wallets: [
         {
+          key: "ecto",
           name: "Ecto",
           icon: walletEctoIcon,
+          component: EctoWallet,
         },
         {
+          key: "pgst",
           name: "Poltergeist",
           icon: walletPoltergeistIcon,
+          component: PoltergeistWallet,
         },
       ],
     },
@@ -59,8 +101,12 @@ export const WalletCard = () => {
 
   const tabsList = useMemo(() => {
     return DATA.blockchains.map((bc) => (
-      <Tabs.Tab active={bc.key === selectedTabKey} onClick={onTabClick(bc.key)}>
-        <Icon>
+      <Tabs.Tab
+        active={bc.key === selectedTabKey}
+        onClick={onTabClick(bc.key)}
+        key={bc.key}
+      >
+        <Icon size={"medium"}>
           <img src={bc.icon} />
         </Icon>
         {bc.name}
@@ -78,35 +124,36 @@ export const WalletCard = () => {
 
   const renderTabsContent = useCallback(() => {
     return activeBlockchain?.wallets.map((wallet) => (
-      <Panel px={4} py={4} backgroundColor="light">
-        <Level>
-          <Level.Side align="left">
-            <Level.Item>
-              <Icon>
-                <img src={wallet.icon} />
-              </Icon>
-            </Level.Item>
-            <Level.Item>{wallet.name}</Level.Item>
-          </Level.Side>
-          <Level.Side align="right">
-            <Level.Item>
-              <Button rounded={true} size={"small"} color="link">
-                Login
-              </Button>
-            </Level.Item>
-          </Level.Side>
-        </Level>
-      </Panel>
+      <Columns.Column size="4" key={wallet.key}>
+        <Panel px={4} py={4} backgroundColor="light">
+          <Level
+            style={{ borderBottom: "1px solid #ddd", paddingBottom: ".5rem" }}
+          >
+            <Level.Side align="left">
+              <Level.Item>
+                <Icon size={"medium"}>
+                  <img src={wallet.icon} />
+                </Icon>
+              </Level.Item>
+              <Level.Item>
+                <b>{wallet.name}</b>
+              </Level.Item>
+            </Level.Side>
+          </Level>
+          <Content>{wallet.description}</Content>
+          <wallet.component />
+        </Panel>
+      </Columns.Column>
     ));
   }, [activeBlockchain]);
 
   return (
     <Card>
       <Section>
-        <Tabs alignContent="center" alignItems="center" align="center">
+        {/* <Tabs alignContent="center" alignItems="center" align="center">
           {tabsList}
-        </Tabs>
-        {renderTabsContent()}
+        </Tabs> */}
+        <Columns>{renderTabsContent()}</Columns>
       </Section>
       {debugMode && <code>selectedTabKey: {selectedTabKey}</code>}
     </Card>

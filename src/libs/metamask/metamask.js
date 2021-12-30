@@ -5,7 +5,7 @@ export const isMetaMaskInstalled = () => {
 }
 
 export const isMetaMaskConnected = () => {
-  return window.ethereum.selectedAddress !== null;
+  return typeof window.ethereum !== 'undefined' && window.ethereum.selectedAddress !== null;
 }
 
 export const connectMetaMask = async () => {
