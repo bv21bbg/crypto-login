@@ -1,9 +1,9 @@
 {
   "name": "react-crypto-login",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview --port 8080"
   },
   "dependencies": {
