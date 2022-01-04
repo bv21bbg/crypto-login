@@ -148,7 +148,7 @@ export const WalletCard = () => {
   }, [activeBlockchain]);
 
   return (
-    <Card>
+    <Card mb={5}>
       <Section>
         {/* <Tabs alignContent="center" alignItems="center" align="center">
           {tabsList}
